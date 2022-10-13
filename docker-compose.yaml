@@ -1,0 +1,43 @@
+version: '3.1'
+services:
+  backend:
+    build: .
+    command: [ "pipenv", "run", "gunicorn", "main:create_app", "--worker-class", "aiohttp.worker.GunicornWebWorker", "-b", "0.0.0.0:8081", "--reload" ]
+    env_file:
+    - .env
+    links:
+      - devbox
+    volumes:
+      - .:/app
+    depends_on:
+      devbox-healthcheck:
+        condition:
+          service_healthy
+  devbox-healthcheck:
+    image: curlimages/curl
+    entrypoint: /bin/sleep 10000
+    links:
+      - devbox
+    depends_on:
+      - devbox
+    healthcheck:
+      test: curl --fail http://devbox:8080/__healthcheck || exit 1
+      interval: 1s
+      timeout: 20s
+      retries: 100
+  devbox:
+    image: healthsamurai/devbox:edge
+    depends_on:
+      - devbox-db
+    links:
+      - "devbox-db:database"
+    env_file:
+      - .env
+    ports:
+      - 8080:8080
+  devbox-db:
+    image: healthsamurai/aidboxdb:13.2
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB:       devbox

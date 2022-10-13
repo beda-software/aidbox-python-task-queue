@@ -1,0 +1,44 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+anaconda = "*"
+jedi = ">=0.13.0"
+json-rpc = ">=1.8.1"
+service-factory = ">=0.1.5"
+black = "*"
+autohooks = "*"
+autohooks-plugin-black = "*"
+autohooks-plugin-isort = "*"
+isort = "*"
+autoflake = "*"
+importmagic = "*"
+epc = "*"
+pep8 = "*"
+flake8 = "*"
+ipython = "*"
+
+[packages]
+python-dateutil = "==2.8.0"
+funcy = "==1.12"
+gunicorn = "==19.9.0"
+aiohttp = "==3.7.4"
+aiocontextvars = "==0.2.2"
+coloredlogs = "==10.0"
+aidbox-python-sdk = {editable = true, ref = "2adbf84d2f8aa129a36c17d0ea8120e2fff5a7d7", git = "https://github.com/Aidbox/aidbox-python-sdk.git"}
+aidboxpy = "*"
+fhirpathpy = "==0.1.1"
+pytest-aiohttp = "==0.3.0"
+pytest-cov = "==2.8.1"
+pytest = "==5.3.1"
+factory-boy = "==2.12.0"
+pytest-factoryboy = "==2.0.3"
+pytest-mock = "==2.0.0"
+sqlalchemy = "*"
+antlr4-python3-runtime = "==4.8"
+fhirpy = "==1.3.0"
+
+[requires]
+python_version = "3.10"

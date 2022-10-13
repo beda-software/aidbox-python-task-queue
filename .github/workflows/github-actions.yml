@@ -1,0 +1,22 @@
+name: github-actions
+on: [push, pull_request]
+jobs:
+    Build:
+        runs-on: ubuntu-latest
+        env:
+            BUILD_IMAGE: ${{ secrets.DOCKER_HUB_REPOSITORY }}:master
+            CACHE_IMAGE: ${{ secrets.DOCKER_HUB_REPOSITORY }}:latest
+            TESTS_AIDBOX_LICENSE_KEY: ${{ secrets.TESTS_AIDBOX_LICENSE_KEY }}
+            TESTS_AIDBOX_LICENSE_ID: ${{ secrets.TESTS_AIDBOX_LICENSE_ID }}
+        steps:
+            - uses: actions/checkout@v2
+            - name: Set up Docker Buildx
+              id: buildx
+              uses: docker/setup-buildx-action@v1
+            - run: docker run --rm --privileged tonistiigi/binfmt --install all
+            - run: docker pull ${{ env.CACHE_IMAGE }} || true
+            - run: >-
+                  docker build --cache-from ${{ env.CACHE_IMAGE }} 
+                  --tag ${{ env.BUILD_IMAGE }} .
+            - name: Run tests
+              run: ./run_test.sh
